@@ -1,0 +1,29 @@
+body {
+	margin 0px;
+	background-color: #000;
+	overflow: hidden;
+}
+#options{
+	text-align: center;
+	position: fixed;
+	left: 0;
+	top: 0;
+	background: #262626;
+	color: #c6c6c6;
+	box-shadow:	3px 3px 2px 2px #161616;
+}
+.function{
+	font-family: monospace;
+	color: #fff;
+}
+button{
+	background-color: #424242;
+	border-color: #161616;
+	color: #c6c6c6;
+}
+table{
+	text-align: right;
+}
+#credit{
+	font-size: 8px;
+}

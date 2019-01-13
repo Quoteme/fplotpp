@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>FPlot++</title>
+		<link rel="stylesheet" href="style.css" type="text/css" media="all">
+	</head>
+	<body>
+		<div id="options">
+			<div id="collapse">
+				f:[
+					<span id="min">-10</span>,
+					<span id="max">10</span>
+				]
+				→C,
+				<br>
+				<table id="funcs">
+				</table>
+				<br>
+				<table>
+					<tr>
+						<td>
+							zoom:
+						</td>
+						<td>
+							<input type="range" id="zoom" min="1" max="500" step="1" value="10" onchange="zoomChange(parseFloat(this.value))">
+						</td>
+						<td>
+							<input type="number" style="width:60px" id="zoomN" value="10" onchange="zoomChange(parseFloat(this.value))">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							xOffset:
+						</td>
+						<td>
+							<input type="range" id="xOff" min="-100" max="100" step="1" value="0" onchange="xOffChange(parseFloat(this.value))">
+						</td>
+						<td>
+							<input type="number" style="width:60px" id="xOffN" value="0" onchange="xOffChange(parseFloat(this.value))">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							accuracy:
+						</td>
+						<td>
+							<input type="range" id="accu" min="10" max="100000" step="20" value="200" onchange="accuChange(parseFloat(this.value))">
+						</td>
+						<td>
+							<input type="number" style="width:60px" id="accuN" value="200" onchange="accuChange(parseFloat(this.value))">
+						</td>
+					</tr>
+				</table>
+			</div>
+			<button onclick="newFunc();render();">new</button>
+			<button onclick="collapse();">collapse</button>
+			<button onclick="render();">render</button>
+			<br>
+			<span id="credit">(01.2019-Luca Leon Happel)</span>
+		</div>
+		<script src="math.min.js" charset="utf-8"></script>
+		<script src="three.min.js" charset="utf-8"></script>
+		<!-- controls -->
+		<script src="OrbitControls.js" charset="utf-8"></script>
+		<!-- main script -->
+		<script src="app.js" charset="utf-8"></script>
+	</body>
+</html>
