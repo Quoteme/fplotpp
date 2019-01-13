@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "com.phonegap.example"
+    versionCode = "10"
+    version     = "1.0.0" >
+
+<!-- versionCode is optional and Android only -->
+
+  <name>fplotpp</name>
+
+  <description>
+	fplotpp (FunctionPlot++) is a complex function plotter using THREE.js and is available online and as an android app!
+  </description>
+
+  <author href="https://github.com/Quoteme/complexGrapher" email="">
+      Luca Leon Happel
+  </author>
+
+  <icon src="icon.png" />
+
+</widget>
