@@ -11,46 +11,83 @@ const zoomChange = (p)=>{
 	document.getElementById("zoom").value	= p;
 	document.getElementById("zoomN").value	= p;
 	zoom									= p;
-	updateDefSet(zoom,xOff);
+	updateDefSet(zoom,reOff);
 	render();
 }
-const xOffChange = (p)=>{
-	document.getElementById("xOff").value	= p;
-	document.getElementById("xOffN").value	= p;
-	xOff									= p;
-	updateDefSet(zoom,xOff);
+const reOffChange = (p)=>{
+	document.getElementById("reOff").value	= p;
+	document.getElementById("reOffN").value	= p;
+	reOff									= p;
+	updateDefSet(zoom,reOff);
 	render();
 }
+const imOffChange = (p)=>{
+	document.getElementById("imOff").value	= p;
+	document.getElementById("imOffN").value	= p;
+	imOff									= p;
+	updateDefSet(zoom,imOff);
+	render();
+}
+
 const accuChange = (p)=>{
 	document.getElementById("accu").value	= p;
 	document.getElementById("accuN").value	= p;
 	accu									= p;
 	render();
 }
-const updateDefSet = (zoom,xOff)=> {
-	document.getElementById("min").innerHTML		= -zoom+xOff;
-	document.getElementById("max").innerHTML		= zoom+xOff;
+const updateDefSet = (zoom,reOff)=> {
+	document.getElementById("min").innerHTML		= -zoom+reOff;
+	document.getElementById("max").innerHTML		= zoom+reOff;
 }
 const getMin = ()=> parseFloat(document.getElementById("min").innerHTML);
 const getMax = ()=> parseFloat(document.getElementById("max").innerHTML);
 const getZoom = ()=> parseFloat(document.getElementById("zoom").value);
-const getxOff = ()=> parseFloat(document.getElementById("xOff").value);
+const getreOff = ()=> parseFloat(document.getElementById("reOff").value);
+const getimOff = ()=> parseFloat(document.getElementById("imOff").value);
 const getAccu = ()=> parseFloat(document.getElementById("accu").value);
 var fNameCrnt = "f".charCodeAt(0);
 
 // THREE.JS stuff
 var camera, controls, scene, renderer;
+var arrows;
 var graph			= {};
 var zoom			= getZoom();
-var xOff			= getxOff();
+var reOff			= getreOff();
+var imOff			= getimOff();
 var accu			= getAccu();
 
 const init = ()=> {
 	// camera stuff
 		camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 100000 );
-		camera.position.z = 50;
+		camera.position.z = 20;
 		scene = new THREE.Scene();
 	// graph stuff
+		arrows = new THREE.Group();
+		// X Arrow
+			let lmx = new THREE.LineBasicMaterial({ color: 0xFF5555 });
+			let lgx	= new THREE.Geometry();
+				lgx.vertices.push(
+					new THREE.Vector3(0,0,0),
+					new THREE.Vector3(1,0,0)
+				)
+			let arrx = new THREE.Line(lgx, lmx);
+		// Y Arrow
+			let lmy = new THREE.LineBasicMaterial({ color: 0x3FBEBE });
+			let lgy	= new THREE.Geometry();
+				lgy.vertices.push(
+					new THREE.Vector3(0,0,0),
+					new THREE.Vector3(0,1,0)
+				)
+			let arry = new THREE.Line(lgy, lmy);
+		// Z Arrow
+			let lmz = new THREE.LineBasicMaterial({ color: 0xBEF451 });
+			let lgz	= new THREE.Geometry();
+				lgz.vertices.push(
+					new THREE.Vector3(0,0,0),
+					new THREE.Vector3(0,0,1)
+				)
+			let arrz = new THREE.Line(lgz, lmz);
+		scene.add(arrx, arry, arrz);
 	// renderer stuff
 		renderer = new THREE.WebGLRenderer( { antialias: true } );
 		renderer.setPixelRatio( window.devicePixelRatio );
@@ -83,14 +120,22 @@ const newGraph = (f,clr) => {
 			color:				clr
 		} );
 		var vertices = [];
-		var code = math.compile(f);
+		if(f[0] != '`')
+			var code = math.compile(f);
+		else
+			f = "f=(x)=>{"+f.replace(/`/g,"")+"}";
+		console.log(f)
 		var res = math.complex();
 	// objective attributes
 		for (var i=getMin(); i<=getMax(); i+=(getMax()-getMin())/accu) {
-			res = math.complex(code.eval({
-				"x":i-xOff
-			}));
-			vertices.push(
+			if(code != undefined){
+				res = math.complex(code.evaluate({
+					"x":math.complex(i-reOff,-imOff)
+					}));
+			}else{
+				res = math.complex( eval(f) (math.complex(i-reOff,-imOff)) )
+			}
+				vertices.push(
 				i,			/* x */
 				res.re,		/* y */
 				res.im,		/* z */
@@ -157,7 +202,6 @@ const render = ()=> {
 
 init();
 animate();
-
 
 //	graph["lal"] = newGraph("e^(i*x/10)*10", 0xffffff);
 //	scene.add( graph["lal"] );
